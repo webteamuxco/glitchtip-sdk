@@ -1,6 +1,6 @@
 {
   "name": "@webteamuxco/glitchtip-sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "UXCO error tracking SDK — pre-configured GlitchTip/Sentry wrapper for NestJS and Next.js",
   "license": "UNLICENSED",
   "private": false,
@@ -66,14 +66,30 @@
     "rxjs": "^7.0.0"
   },
   "peerDependenciesMeta": {
-    "@nestjs/common": { "optional": true },
-    "@nestjs/core": { "optional": true },
-    "@sentry/nextjs": { "optional": true },
-    "@sentry/node": { "optional": true },
-    "@sentry/react": { "optional": true },
-    "next": { "optional": true },
-    "react": { "optional": true },
-    "rxjs": { "optional": true }
+    "@nestjs/common": {
+      "optional": true
+    },
+    "@nestjs/core": {
+      "optional": true
+    },
+    "@sentry/nextjs": {
+      "optional": true
+    },
+    "@sentry/node": {
+      "optional": true
+    },
+    "@sentry/react": {
+      "optional": true
+    },
+    "next": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "rxjs": {
+      "optional": true
+    }
   },
   "dependencies": {
     "kleur": "^4.1.5",
