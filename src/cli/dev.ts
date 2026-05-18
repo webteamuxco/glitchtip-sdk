@@ -78,8 +78,8 @@ async function provisionDsn(): Promise<void> {
       {
         type: 'text',
         name: 'email',
-        message: 'GlitchTip admin email (created on first run):',
-        initial: 'admin@uxco.local',
+        message: 'GlitchTip admin email (created on first run, must not finish by .local ):',
+        initial: 'admin@uxco-group.com',
       },
       {
         type: 'password',
