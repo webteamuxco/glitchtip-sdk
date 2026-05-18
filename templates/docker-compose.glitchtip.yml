@@ -1,0 +1,71 @@
+# Local GlitchTip dev stack shipped by @uxco/glitchtip.
+# Started/stopped by `uxco-glitchtip dev:up` / `dev:down`.
+# Do NOT use these settings in production (weak secret, open registration, debug email).
+
+name: uxco-glitchtip-dev
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: glitchtip
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  web:
+    image: glitchtip/glitchtip:latest
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    ports:
+      - "${GLITCHTIP_PORT:-8000}:8000"
+    environment: &gt-env
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/glitchtip
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: dev-only-not-for-prod-change-me
+      PORT: "8000"
+      EMAIL_URL: consolemail://
+      GLITCHTIP_DOMAIN: http://localhost:${GLITCHTIP_PORT:-8000}
+      DEFAULT_FROM_EMAIL: noreply@glitchtip.local
+      ENABLE_OPEN_USER_REGISTRATION: "true"
+      CELERY_WORKER_AUTOSCALE: "1,3"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8000/api/0/"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  worker:
+    image: glitchtip/glitchtip:latest
+    command: ./bin/run-celery-with-beat.sh
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    environment: *gt-env
+
+  migrate:
+    image: glitchtip/glitchtip:latest
+    command: ./manage.py migrate
+    depends_on:
+      postgres: { condition: service_healthy }
+    environment: *gt-env
+    restart: "no"
+
+volumes:
+  pgdata:
