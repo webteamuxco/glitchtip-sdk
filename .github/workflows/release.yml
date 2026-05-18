@@ -24,7 +24,7 @@ jobs:
           node-version: 20
           cache: pnpm
           registry-url: https://npm.pkg.github.com
-          scope: '@uxco'
+          scope: '@webteamuxco'
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
