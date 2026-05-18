@@ -71,6 +71,14 @@ function mergeCookies(jar: Map<string, string>, setCookie: string[]): string {
   return [...jar.entries()].map(([k, v]) => `${k}=${v}`).join('; ');
 }
 
+function extractAllauthError(body: unknown): { code: string; message: string } | null {
+  if (!body || typeof body !== 'object') return null;
+  const errors = (body as { errors?: unknown }).errors;
+  if (!Array.isArray(errors) || errors.length === 0) return null;
+  const first = errors[0] as { code?: string; message?: string };
+  return { code: first.code ?? 'unknown', message: first.message ?? '' };
+}
+
 export async function authenticate(base: string, email: string, password: string): Promise<Session | null> {
   const jar = new Map<string, string>();
 
@@ -115,7 +123,22 @@ export async function authenticate(base: string, email: string, password: string
     return { base, cookies, csrf };
   }
 
-  console.error(kleur.red(`✗ signup (${signup.status}) and login (${login.status}) both failed`));
+  const signupErr = extractAllauthError(signup.body);
+  const loginErr = extractAllauthError(login.body);
+
+  // Most common case: leftover user from a prior run + new password typed
+  if (signupErr?.code === 'email_taken' && loginErr?.code === 'email_password_mismatch') {
+    console.error(kleur.red(`✗ ${email} already exists in GlitchTip from a previous run, and the password you typed doesn't match.`));
+    console.error(kleur.gray('  → retry `dev:up` with the original password,'));
+    console.error(kleur.gray('  → or run `uxco-glitchtip dev:reset` to wipe the DB and start fresh.'));
+    return null;
+  }
+
+  console.error(kleur.red('✗ GlitchTip authentication failed'));
+  if (signupErr) console.error(kleur.gray(`  signup: ${signupErr.message} (${signupErr.code})`));
+  else console.error(kleur.gray(`  signup → HTTP ${signup.status}`));
+  if (loginErr) console.error(kleur.gray(`  login:  ${loginErr.message} (${loginErr.code})`));
+  else console.error(kleur.gray(`  login  → HTTP ${login.status}`));
   return null;
 }
 

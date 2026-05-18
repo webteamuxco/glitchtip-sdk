@@ -1,6 +1,6 @@
 # 5. React (Vite / CRA SPA)
 
-The `@uxco/glitchtip/react` subpath targets React SPAs **outside of Next.js** (Vite, Create React App, etc.). It builds on `@sentry/react` and also re-exports `ErrorBoundary`, `withErrorBoundary`, `withProfiler`, and helpers.
+The `@webteamuxco/glitchtip-sdk/react` subpath targets React SPAs **outside of Next.js** (Vite, Create React App, etc.). It builds on `@sentry/react` and also re-exports `ErrorBoundary`, `withErrorBoundary`, `withProfiler`, and helpers.
 
 ## 5.1 Minimal setup (Vite)
 
@@ -8,7 +8,7 @@ The `@uxco/glitchtip/react` subpath targets React SPAs **outside of Next.js** (V
 // src/main.tsx
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { initClient } from '@uxco/glitchtip/react';
+import { initClient } from '@webteamuxco/glitchtip-sdk/react';
 import App from './App';
 
 initClient({
@@ -37,7 +37,7 @@ VITE_APP_VERSION=0.1.0
 
 ```tsx
 // src/index.tsx
-import { initClient } from '@uxco/glitchtip/react';
+import { initClient } from '@webteamuxco/glitchtip-sdk/react';
 
 initClient({
   dsn: process.env.REACT_APP_GLITCHTIP_DSN,
@@ -50,7 +50,7 @@ initClient({
 
 ```tsx
 // src/App.tsx
-import { ErrorBoundary } from '@uxco/glitchtip/react';
+import { ErrorBoundary } from '@webteamuxco/glitchtip-sdk/react';
 
 export default function App() {
   return (
@@ -71,7 +71,7 @@ export default function App() {
 ## 5.4 Use case — per-feature ErrorBoundary (HOC)
 
 ```tsx
-import { withErrorBoundary } from '@uxco/glitchtip/react';
+import { withErrorBoundary } from '@webteamuxco/glitchtip-sdk/react';
 
 function CheckoutFormInner() {
   // ...
@@ -88,7 +88,7 @@ export const CheckoutForm = withErrorBoundary(CheckoutFormInner, {
 ## 5.5 Use case — identify the user after login
 
 ```tsx
-import { setUser } from '@uxco/glitchtip/react';
+import { setUser } from '@webteamuxco/glitchtip-sdk/react';
 
 export function useSyncSentryUser(user: User | null) {
   useEffect(() => {
@@ -104,7 +104,7 @@ export function useSyncSentryUser(user: User | null) {
 ## 5.6 Use case — capture a caught error (try/catch)
 
 ```tsx
-import { captureException, setTag } from '@uxco/glitchtip/react';
+import { captureException, setTag } from '@webteamuxco/glitchtip-sdk/react';
 
 async function pay() {
   try {
@@ -119,7 +119,7 @@ async function pay() {
 ## 5.7 Use case — manual breadcrumb (navigation, key click)
 
 ```tsx
-import { addBreadcrumb } from '@uxco/glitchtip/react';
+import { addBreadcrumb } from '@webteamuxco/glitchtip-sdk/react';
 
 function onAddToCart(itemId: string) {
   addBreadcrumb({

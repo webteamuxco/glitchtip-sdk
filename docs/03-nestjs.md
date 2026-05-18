@@ -1,6 +1,6 @@
 # 3. NestJS
 
-The `@uxco/glitchtip/nest` subpath exposes:
+The `@webteamuxco/glitchtip-sdk/nest` subpath exposes:
 
 - `GlitchtipModule.forRoot()` — initializes Sentry and registers filter & interceptor globally
 - `GlitchtipExceptionFilter` — captures unhandled exceptions and 5xx
@@ -11,7 +11,7 @@ The `@uxco/glitchtip/nest` subpath exposes:
 ```ts
 // src/app.module.ts
 import { Module } from '@nestjs/common';
-import { GlitchtipModule } from '@uxco/glitchtip/nest';
+import { GlitchtipModule } from '@webteamuxco/glitchtip-sdk/nest';
 
 @Module({
   imports: [GlitchtipModule.forRoot()],
@@ -55,7 +55,7 @@ GlitchtipModule.forRoot({
 ```ts
 // src/orders/orders.service.ts
 import { Injectable } from '@nestjs/common';
-import { captureWithContext, addBreadcrumb } from '@uxco/glitchtip';
+import { captureWithContext, addBreadcrumb } from '@webteamuxco/glitchtip-sdk';
 
 @Injectable()
 export class OrdersService {
@@ -82,7 +82,7 @@ Best done in a guard or middleware that resolves the authenticated user:
 ```ts
 // src/auth/auth.middleware.ts
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { setUser } from '@uxco/glitchtip';
+import { setUser } from '@webteamuxco/glitchtip-sdk';
 
 @Injectable()
 export class IdentifyUserMiddleware implements NestMiddleware {
@@ -102,7 +102,7 @@ export class IdentifyUserMiddleware implements NestMiddleware {
 ```ts
 // src/common/all-exceptions.filter.ts
 import { ArgumentsHost, Catch } from '@nestjs/common';
-import { GlitchtipExceptionFilter } from '@uxco/glitchtip/nest';
+import { GlitchtipExceptionFilter } from '@webteamuxco/glitchtip-sdk/nest';
 
 @Catch()
 export class AllExceptionsFilter extends GlitchtipExceptionFilter {
@@ -128,7 +128,7 @@ The interceptor only covers HTTP. For jobs:
 ```ts
 // src/jobs/email.processor.ts
 import { Process, Processor } from '@nestjs/bull';
-import { captureWithContext, addBreadcrumb } from '@uxco/glitchtip';
+import { captureWithContext, addBreadcrumb } from '@webteamuxco/glitchtip-sdk';
 
 @Processor('email')
 export class EmailProcessor {
@@ -155,7 +155,7 @@ Ensure buffered events leave the process before `process.exit`:
 ```ts
 // src/main.ts
 import { NestFactory } from '@nestjs/core';
-import { flush } from '@uxco/glitchtip';
+import { flush } from '@webteamuxco/glitchtip-sdk';
 import { AppModule } from './app.module';
 
 async function bootstrap() {

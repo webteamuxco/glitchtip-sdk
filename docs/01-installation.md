@@ -1,13 +1,13 @@
 # 1. Installation
 
-The package is published on **GitHub Packages** under the `@uxco` scope. The registry only needs to be configured once per project.
+The package is published on **GitHub Packages** under the `@webteamuxco` scope. The registry only needs to be configured once per project.
 
 ## 1.1 Configure the registry
 
 At the root of the consuming project, create an `.npmrc` file:
 
 ```ini
-@uxco:registry=https://npm.pkg.github.com
+@webteamuxco:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
@@ -26,25 +26,25 @@ The SDK declares all Sentry peers as **optional** — install only the one you n
 ### NestJS
 
 ```bash
-pnpm add @uxco/glitchtip @sentry/node
+pnpm add @webteamuxco/glitchtip-sdk @sentry/node
 ```
 
 ### Next.js
 
 ```bash
-pnpm add @uxco/glitchtip @sentry/nextjs
+pnpm add @webteamuxco/glitchtip-sdk @sentry/nextjs
 ```
 
 ### React (Vite / CRA / SPA)
 
 ```bash
-pnpm add @uxco/glitchtip @sentry/react
+pnpm add @webteamuxco/glitchtip-sdk @sentry/react
 ```
 
 ### Plain Node worker / script
 
 ```bash
-pnpm add @uxco/glitchtip @sentry/node
+pnpm add @webteamuxco/glitchtip-sdk @sentry/node
 ```
 
 ## 1.3 Scaffold the integration (optional)
@@ -56,7 +56,7 @@ The `init` command detects the framework from `package.json` and writes:
 - `instrumentation.ts` + `instrumentation-client.ts` for Next.js
 
 ```bash
-pnpm dlx @uxco/glitchtip init
+pnpm dlx @webteamuxco/glitchtip-sdk init
 ```
 
 > `init` does not touch `AppModule.ts` or `layout.tsx` — you still need to wire the bootstrap by hand (see framework-specific pages).

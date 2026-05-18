@@ -2,8 +2,8 @@
 
 The SDK exposes two entry points:
 
-- `@uxco/glitchtip/next/server` — for `instrumentation.ts` (Node runtime; Edge wherever Sentry supports it)
-- `@uxco/glitchtip/next/client` — for `instrumentation-client.ts` (browser bundle)
+- `@webteamuxco/glitchtip-sdk/next/server` — for `instrumentation.ts` (Node runtime; Edge wherever Sentry supports it)
+- `@webteamuxco/glitchtip-sdk/next/client` — for `instrumentation-client.ts` (browser bundle)
 
 Compatible with **App Router** and **Pages Router** (Next 14 & 15).
 
@@ -12,7 +12,7 @@ Compatible with **App Router** and **Pages Router** (Next 14 & 15).
 ### `instrumentation.ts` (project root)
 
 ```ts
-import { initServer } from '@uxco/glitchtip/next/server';
+import { initServer } from '@webteamuxco/glitchtip-sdk/next/server';
 
 export async function register(): Promise<void> {
   initServer();
@@ -22,7 +22,7 @@ export async function register(): Promise<void> {
 ### `instrumentation-client.ts` (root, Next 15+)
 
 ```ts
-import { initClient } from '@uxco/glitchtip/next/client';
+import { initClient } from '@webteamuxco/glitchtip-sdk/next/client';
 initClient();
 ```
 
@@ -47,7 +47,7 @@ APP_ENV=development
 ```ts
 // app/(checkout)/actions.ts
 'use server';
-import { captureWithContext } from '@uxco/glitchtip';
+import { captureWithContext } from '@webteamuxco/glitchtip-sdk';
 
 export async function placeOrder(formData: FormData) {
   try {
@@ -67,7 +67,7 @@ export async function placeOrder(formData: FormData) {
 ```ts
 // app/api/orders/route.ts
 import { NextResponse } from 'next/server';
-import { captureWithContext } from '@uxco/glitchtip';
+import { captureWithContext } from '@webteamuxco/glitchtip-sdk';
 
 export async function POST(req: Request) {
   try {
@@ -86,7 +86,7 @@ export async function POST(req: Request) {
 ```ts
 // pages/api/orders.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { captureWithContext } from '@uxco/glitchtip';
+import { captureWithContext } from '@webteamuxco/glitchtip-sdk';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -105,7 +105,7 @@ In a middleware or Server Component that resolves the session:
 
 ```ts
 // lib/auth.ts
-import { setUser } from '@uxco/glitchtip';
+import { setUser } from '@webteamuxco/glitchtip-sdk';
 import { getServerSession } from 'next-auth';
 
 export async function loadUser() {
@@ -149,7 +149,7 @@ export default function ErrorBoundary({ error, reset }: { error: Error; reset: (
 // app/glitchtip-init.tsx
 'use client';
 import { useEffect } from 'react';
-import { initClient } from '@uxco/glitchtip/next/client';
+import { initClient } from '@webteamuxco/glitchtip-sdk/next/client';
 
 export function GlitchtipInit() {
   useEffect(() => {
@@ -187,7 +187,7 @@ Or via a CI-injected variable:
 
 ```ts
 // instrumentation.ts
-import { initServer } from '@uxco/glitchtip/next/server';
+import { initServer } from '@webteamuxco/glitchtip-sdk/next/server';
 
 export async function register(): Promise<void> {
   initServer({

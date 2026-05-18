@@ -1,4 +1,4 @@
-# @uxco/glitchtip
+# @webteamuxco/glitchtip-sdk
 
 Pre-configured error tracking wrapper for UXCO projects. Wraps the Sentry SDK
 (GlitchTip is wire-compatible with Sentry) with UXCO defaults: DSN/env/release
@@ -11,37 +11,39 @@ This package is published to GitHub Packages. Add a `.npmrc` to the consumer
 project (see `.npmrc.example`):
 
 ```ini
-@uxco:registry=https://npm.pkg.github.com
+@webteamuxco:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
+
+FIRST: see [Onboarding](./docs/00-onboarding.md)
 
 Then:
 
 ```bash
 # NestJS
-pnpm add @uxco/glitchtip @sentry/node
+pnpm add @webteamuxco/glitchtip-sdk @sentry/node
 
 # Next.js
-pnpm add @uxco/glitchtip @sentry/nextjs
+pnpm add @webteamuxco/glitchtip-sdk @sentry/nextjs
 ```
 
 Or run the installer in any project:
 
 ```bash
-pnpm dlx @uxco/glitchtip init
+pnpm dlx @webteamuxco/glitchtip-sdk init
 ```
 
 ## Local dev server (Docker)
 
 The package ships a Docker Compose stack so you can run GlitchTip locally
 without touching shared infra. Commands operate on the compose file inside
-`node_modules/@uxco/glitchtip/templates/` — nothing is copied into your repo.
+`node_modules/@webteamuxco/glitchtip-sdk/templates/` — nothing is copied into your repo.
 
 ```bash
-pnpm dlx @uxco/glitchtip dev:up      # start stack + auto-create project + write DSN to .env
-pnpm dlx @uxco/glitchtip dev:logs    # tail web + worker logs
-pnpm dlx @uxco/glitchtip dev:down    # stop (keeps data)
-pnpm dlx @uxco/glitchtip dev:reset   # destroy volumes (events, users, projects)
+pnpm dlx @webteamuxco/glitchtip-sdk dev:up      # start stack + auto-create project + write DSN to .env
+pnpm dlx @webteamuxco/glitchtip-sdk dev:logs    # tail web + worker logs
+pnpm dlx @webteamuxco/glitchtip-sdk dev:down    # stop (keeps data)
+pnpm dlx @webteamuxco/glitchtip-sdk dev:reset   # destroy volumes (events, users, projects)
 ```
 
 What `dev:up` does:
@@ -54,7 +56,7 @@ What `dev:up` does:
 6. Calls the GlitchTip API to register the user, create org/team/project, fetch the DSN
 7. Writes `GLITCHTIP_DSN=` into your `.env.local` (or `.env`)
 
-Override the port with `GLITCHTIP_PORT=8100 pnpm dlx @uxco/glitchtip dev:up`.
+Override the port with `GLITCHTIP_PORT=8100 pnpm dlx @webteamuxco/glitchtip-sdk dev:up`.
 
 If the API provisioning fails (network, GlitchTip version mismatch, etc.) the
 CLI prints a clear fallback: open the UI, create a project manually, paste the
@@ -76,7 +78,7 @@ DSN into `.env`.
 ```ts
 // app.module.ts
 import { Module } from '@nestjs/common';
-import { GlitchtipModule } from '@uxco/glitchtip/nest';
+import { GlitchtipModule } from '@webteamuxco/glitchtip-sdk/nest';
 
 @Module({
   imports: [GlitchtipModule.forRoot()],
@@ -93,18 +95,18 @@ breadcrumbs. Pass `{ registerGlobalFilter: false }` or
 
 ```ts
 // instrumentation.ts
-import { initServer } from '@uxco/glitchtip/next/server';
+import { initServer } from '@webteamuxco/glitchtip-sdk/next/server';
 export const register = async () => initServer();
 
 // instrumentation-client.ts (or app/layout client component)
-import { initClient } from '@uxco/glitchtip/next/client';
+import { initClient } from '@webteamuxco/glitchtip-sdk/next/client';
 initClient();
 ```
 
 ## Manual usage
 
 ```ts
-import { initErrorTracking, captureWithContext, setUser } from '@uxco/glitchtip';
+import { initErrorTracking, captureWithContext, setUser } from '@webteamuxco/glitchtip-sdk';
 
 initErrorTracking();
 setUser({ id: user.id, email: user.email });

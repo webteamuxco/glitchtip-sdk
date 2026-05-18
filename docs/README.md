@@ -1,6 +1,6 @@
-# `@uxco/glitchtip` documentation
+# `@webteamuxco/glitchtip-sdk` documentation
 
-Concrete, copy-paste-ready use cases for integrating and testing the `@uxco/glitchtip` SDK in a real project.
+Concrete, copy-paste-ready use cases for integrating and testing the `@webteamuxco/glitchtip-sdk` SDK in a real project.
 
 Each page contains snippets you can drop into a project, intentionally-broken routes/handlers you can use to verify that errors reach GlitchTip, and the env vars required.
 
@@ -8,6 +8,7 @@ Each page contains snippets you can drop into a project, intentionally-broken ro
 
 | # | File | For who? |
 | - | ---- | -------- |
+| 0 | [00-onboarding.md](./00-onboarding.md) | Everyone — full step-by-step (PAT, `.npmrc`, install, DSN, wiring, CI) with placeholder variables |
 | 1 | [01-installation.md](./01-installation.md) | Everyone — install the package, configure the GitHub Packages registry |
 | 2 | [02-local-dev.md](./02-local-dev.md) | Everyone — spin up a local GlitchTip instance with Docker |
 | 3 | [03-nestjs.md](./03-nestjs.md) | NestJS projects (API / backend) |
@@ -21,19 +22,19 @@ Each page contains snippets you can drop into a project, intentionally-broken ro
 
 ```bash
 # 1. Configure the registry (.npmrc in the consuming project)
-echo "@uxco:registry=https://npm.pkg.github.com" >> .npmrc
+echo "@webteamuxco:registry=https://npm.pkg.github.com" >> .npmrc
 echo "//npm.pkg.github.com/:_authToken=\${GITHUB_TOKEN}" >> .npmrc
 
 # 2. Install the SDK + the matching Sentry peer
-pnpm add @uxco/glitchtip @sentry/node          # NestJS / Node
-pnpm add @uxco/glitchtip @sentry/nextjs        # Next.js
-pnpm add @uxco/glitchtip @sentry/react         # React SPA
+pnpm add @webteamuxco/glitchtip-sdk @sentry/node          # NestJS / Node
+pnpm add @webteamuxco/glitchtip-sdk @sentry/nextjs        # Next.js
+pnpm add @webteamuxco/glitchtip-sdk @sentry/react         # React SPA
 
 # 3. Start GlitchTip locally (writes the DSN into .env)
-pnpm dlx @uxco/glitchtip dev:up
+pnpm dlx @webteamuxco/glitchtip-sdk dev:up
 
 # 4. Scaffold the integration (env.example + bootstrap file)
-pnpm dlx @uxco/glitchtip init
+pnpm dlx @webteamuxco/glitchtip-sdk init
 ```
 
 Once the DSN is in `.env`, follow the page matching your stack to wire the SDK in and test it.

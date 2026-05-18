@@ -9,7 +9,7 @@ To test the integration without touching shared infra, the SDK ships a **Docker 
 From inside the consuming project:
 
 ```bash
-pnpm dlx @uxco/glitchtip dev:up
+pnpm dlx @webteamuxco/glitchtip-sdk dev:up
 ```
 
 What the command does:
@@ -30,7 +30,7 @@ When it returns:
 ## 2.2 Custom port
 
 ```bash
-GLITCHTIP_PORT=8100 pnpm dlx @uxco/glitchtip dev:up
+GLITCHTIP_PORT=8100 pnpm dlx @webteamuxco/glitchtip-sdk dev:up
 ```
 
 ## 2.3 If auto-provisioning fails
@@ -49,9 +49,9 @@ GLITCHTIP_DSN=http://xxxxxxxxxxxxxxxx@localhost:8000/1
 ## 2.4 Lifecycle
 
 ```bash
-pnpm dlx @uxco/glitchtip dev:logs   # tail web + worker
-pnpm dlx @uxco/glitchtip dev:down   # stop (data volumes are kept)
-pnpm dlx @uxco/glitchtip dev:reset  # ⚠️ destroys volumes (events, users, projects)
+pnpm dlx @webteamuxco/glitchtip-sdk dev:logs   # tail web + worker
+pnpm dlx @webteamuxco/glitchtip-sdk dev:down   # stop (data volumes are kept)
+pnpm dlx @webteamuxco/glitchtip-sdk dev:reset  # ⚠️ destroys volumes (events, users, projects)
 ```
 
 ## 2.5 Use case — switching projects during dev
@@ -66,10 +66,10 @@ The Docker instance is not project-scoped — a single `dev:up` covers all your 
 
 ## 2.6 Use case — CI / integration tests
 
-The compose file lives at `node_modules/@uxco/glitchtip/templates/docker-compose.glitchtip.yml`. To start the stack in CI without the interactive wizard:
+The compose file lives at `node_modules/@webteamuxco/glitchtip-sdk/templates/docker-compose.glitchtip.yml`. To start the stack in CI without the interactive wizard:
 
 ```bash
-docker compose -f node_modules/@uxco/glitchtip/templates/docker-compose.glitchtip.yml up -d
+docker compose -f node_modules/@webteamuxco/glitchtip-sdk/templates/docker-compose.glitchtip.yml up -d
 # wait until http://localhost:8000 responds, then provision via the API
 ```
 
