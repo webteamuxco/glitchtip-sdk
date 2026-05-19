@@ -130,3 +130,27 @@ Tag with `v*` and push — the GitHub Action publishes to GitHub Packages.
 pnpm version patch
 git push --follow-tags
 ```
+
+## DOCUMENTATIONS
+
+### SDK
+
+- [Global](./docs/README.md)
+- [Onboarding](./docs/00-onboarding.md)
+- [Installation](./docs/01-installation.md)
+- [Local Dev](./docs/02-local-dev.md)
+- [NestJS](./docs/03-nestjs.md)
+- [NextJS](./docs/04-nextjs.md)
+- [React](./docs/05-react.md)
+
+## Tests
+
+- [Unit Tests](./test/README.md)
+
+
+### Demos
+
+- [Global](./demo/README.md)
+- [NestJS](./demo/nestjs/README.md)
+- [NextJS](./demo/nextjs/README.md)
+- [React - Vite](./demo/react-vite/README.md)
