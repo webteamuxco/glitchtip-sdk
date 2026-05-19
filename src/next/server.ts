@@ -17,5 +17,7 @@ export function initServer(opts: UxcoTrackingOptions = {}): void {
     serverName: config.serverName,
     ignoreErrors: config.ignoreErrors,
     beforeSend: config.beforeSend as NonNullable<Parameters<typeof Sentry.init>[0]>['beforeSend'],
+    enableLogs: config.enableLogs,
+    beforeSendLog: config.beforeSendLog as NonNullable<Parameters<typeof Sentry.init>[0]>['beforeSendLog'],
   });
 }

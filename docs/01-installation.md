@@ -72,5 +72,6 @@ pnpm dlx @webteamuxco/glitchtip-sdk init
 | `APP_ENV` | Server | `development` / `staging` / `production` |
 | `SENTRY_ENVIRONMENT` | Server | Same — wins over `APP_ENV` if both are set |
 | `APP_RELEASE` / `SENTRY_RELEASE` | Server | Release tag (defaults to `npm_package_version`) |
+| `GLITCHTIP_ENABLE_LOGS` / `SENTRY_ENABLE_LOGS` | Server | Set to `true` to enable the GlitchTip logs feature |
 
 Resolution order lives in [src/core/defaults.ts:33-41](../src/core/defaults.ts#L33-L41).

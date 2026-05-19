@@ -9,6 +9,8 @@ export interface UxcoTrackingOptions {
   serverName?: string;
   ignoreErrors?: (string | RegExp)[];
   beforeSend?: (event: unknown, hint: unknown) => unknown | null;
+  enableLogs?: boolean;
+  beforeSendLog?: (log: unknown) => unknown | null;
 }
 
 const PII_KEYS = ['password', 'token', 'secret', 'authorization', 'cookie', 'apikey', 'api_key'];
@@ -24,9 +26,10 @@ export function scrubPII<T>(value: T): T {
 }
 
 export function resolveDefaults(opts: UxcoTrackingOptions = {}): Required<
-  Omit<UxcoTrackingOptions, 'beforeSend' | 'ignoreErrors' | 'serverName'>
+  Omit<UxcoTrackingOptions, 'beforeSend' | 'beforeSendLog' | 'ignoreErrors' | 'serverName'>
 > & {
   beforeSend: NonNullable<UxcoTrackingOptions['beforeSend']>;
+  beforeSendLog: NonNullable<UxcoTrackingOptions['beforeSendLog']>;
   ignoreErrors: (string | RegExp)[];
   serverName: string | undefined;
 } {
@@ -39,6 +42,8 @@ export function resolveDefaults(opts: UxcoTrackingOptions = {}): Required<
   const isProd = env === 'production';
 
   const envDsn = process.env.SENTRY_DSN ?? process.env.GLITCHTIP_DSN ?? '';
+  const envEnableLogs =
+    process.env.GLITCHTIP_ENABLE_LOGS === 'true' || process.env.SENTRY_ENABLE_LOGS === 'true';
 
   return {
     dsn: opts.dsn ?? envDsn,
@@ -60,6 +65,15 @@ export function resolveDefaults(opts: UxcoTrackingOptions = {}): Required<
           return scrubPII(event);
         }
         return event;
+      }),
+    enableLogs: opts.enableLogs ?? envEnableLogs,
+    beforeSendLog:
+      opts.beforeSendLog ??
+      ((log: unknown) => {
+        if (log && typeof log === 'object') {
+          return scrubPII(log);
+        }
+        return log;
       }),
   };
 }

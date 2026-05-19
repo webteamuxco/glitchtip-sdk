@@ -196,7 +196,55 @@ export async function register(): Promise<void> {
 }
 ```
 
-## 4.9 Test the integration
+## 4.9 Use case — send logs to GlitchTip
+
+Enable logs on **both** runtimes you care about — they are independent:
+
+```ts
+// instrumentation.ts
+initServer({ enableLogs: true });
+
+// instrumentation-client.ts
+initClient({ enableLogs: true });
+```
+
+Or via env (read by both `initClient` and `initServer`):
+
+```bash
+GLITCHTIP_ENABLE_LOGS=true
+```
+
+Then use the `log` helper anywhere — same API on client and server:
+
+```ts
+import { log } from '@webteamuxco/glitchtip-sdk/next';
+
+// Server Action
+'use server';
+export async function placeOrder(formData: FormData) {
+  log.info('placeOrder.start', { itemCount: formData.getAll('item').length });
+  // ...
+  log.warn('placeOrder.retry', { attempt: 2 });
+}
+```
+
+```tsx
+// Client component
+'use client';
+import { log } from '@webteamuxco/glitchtip-sdk/next';
+
+export function CheckoutButton() {
+  return (
+    <button onClick={() => log.info('checkout.click', { from: 'cart' })}>
+      Checkout
+    </button>
+  );
+}
+```
+
+Levels: `trace`, `debug`, `info`, `warn`, `error`, `fatal`. The default `beforeSendLog` scrubs PII keys (`password`, `token`, `secret`, `authorization`, `cookie`, `apikey`) from attributes.
+
+## 4.10 Test the integration
 
 ### Server error (route handler)
 

@@ -1,9 +1,10 @@
-import { DynamicModule, Global, Module } from '@nestjs/common';
+import { DynamicModule, Global, Module, type Provider } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { initErrorTracking } from '../core/init.js';
 import type { UxcoTrackingOptions } from '../core/defaults.js';
 import { GlitchtipExceptionFilter } from './filter.js';
 import { GlitchtipBreadcrumbInterceptor } from './interceptor.js';
+import { UxcoLogger } from './logger.js';
 
 export interface GlitchtipModuleOptions extends UxcoTrackingOptions {
   registerGlobalFilter?: boolean;
@@ -16,7 +17,7 @@ export class GlitchtipModule {
   static forRoot(options: GlitchtipModuleOptions = {}): DynamicModule {
     initErrorTracking(options);
 
-    const providers = [];
+    const providers: Provider[] = [UxcoLogger];
     if (options.registerGlobalFilter !== false) {
       providers.push({ provide: APP_FILTER, useClass: GlitchtipExceptionFilter });
     }
@@ -27,7 +28,7 @@ export class GlitchtipModule {
     return {
       module: GlitchtipModule,
       providers,
-      exports: [],
+      exports: [UxcoLogger],
     };
   }
 }

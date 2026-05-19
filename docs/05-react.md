@@ -148,7 +148,34 @@ initClient({
 
 Sentry will add `sentry-trace` / `baggage` headers to matching `fetch` requests.
 
-## 5.9 Test the integration
+## 5.9 Use case — send logs to GlitchTip
+
+```ts
+initClient({
+  dsn: import.meta.env.VITE_GLITCHTIP_DSN,
+  enableLogs: true,
+});
+```
+
+```tsx
+import { log } from '@webteamuxco/glitchtip-sdk/react';
+
+function CheckoutButton() {
+  return (
+    <button
+      onClick={() => {
+        log.info('checkout.click', { from: 'cart' });
+      }}
+    >
+      Checkout
+    </button>
+  );
+}
+```
+
+Levels: `trace`, `debug`, `info`, `warn`, `error`, `fatal`. PII keys in attributes are scrubbed by default via `beforeSendLog` — override on `initClient` for custom redaction.
+
+## 5.10 Test the integration
 
 ```tsx
 function DebugThrow() {

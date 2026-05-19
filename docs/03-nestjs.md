@@ -5,6 +5,7 @@ The `@webteamuxco/glitchtip-sdk/nest` subpath exposes:
 - `GlitchtipModule.forRoot()` — initializes Sentry and registers filter & interceptor globally
 - `GlitchtipExceptionFilter` — captures unhandled exceptions and 5xx
 - `GlitchtipBreadcrumbInterceptor` — adds an HTTP breadcrumb per request
+- `UxcoLogger` — `LoggerService` injectable that mirrors `console` output to GlitchTip logs
 
 ## 3.1 Minimal setup
 
@@ -201,7 +202,68 @@ curl http://localhost:3000/debug/throw
 
 See [07-testing.md](./07-testing.md) for more scenarios.
 
-## 3.9 Default filter behaviour
+## 3.9 Use case — send logs to GlitchTip
+
+Activate the logs feature via the `enableLogs` option (or the `GLITCHTIP_ENABLE_LOGS=true` env var):
+
+```ts
+GlitchtipModule.forRoot({ enableLogs: true })
+```
+
+### 3.9.1 Manual log API
+
+```ts
+import { Injectable } from '@nestjs/common';
+import { log } from '@webteamuxco/glitchtip-sdk';
+
+@Injectable()
+export class OrdersService {
+  async confirm(orderId: string) {
+    log.info('order confirmed', { orderId });
+    log.warn('low stock detected', { orderId, remaining: 2 });
+    log.error('payment failed', { orderId, reason: 'card_declined' });
+  }
+}
+```
+
+Available levels: `trace`, `debug`, `info`, `warn`, `error`, `fatal`.
+
+### 3.9.2 Replace Nest's logger
+
+`UxcoLogger` extends `ConsoleLogger` and also forwards every log to GlitchTip:
+
+```ts
+// src/main.ts
+import { NestFactory } from '@nestjs/core';
+import { UxcoLogger } from '@webteamuxco/glitchtip-sdk/nest';
+import { AppModule } from './app.module';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  app.useLogger(app.get(UxcoLogger));
+  await app.listen(3000);
+}
+bootstrap();
+```
+
+Or inject it inside a service:
+
+```ts
+@Injectable()
+export class OrdersService {
+  constructor(private readonly logger: UxcoLogger) {
+    this.logger.setContext(OrdersService.name);
+  }
+
+  confirm(orderId: string) {
+    this.logger.log(`order confirmed ${orderId}`);
+  }
+}
+```
+
+PII scrubbing (`password`, `token`, `secret`, `authorization`, `cookie`, `apikey`) is applied to log attributes by default via `beforeSendLog`. Override it on `forRoot` if you need custom redaction.
+
+## 3.10 Default filter behaviour
 
 The filter at [src/nest/filter.ts](../src/nest/filter.ts):
 
