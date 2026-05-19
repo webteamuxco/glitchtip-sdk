@@ -3,8 +3,9 @@ import {
   ErrorBoundary,
   captureException,
   captureMessage,
+  log,
   setUser,
-} from '@uxco/glitchtip/react';
+} from '@webteamuxco/glitchtip-sdk/react';
 
 function BrokenChild({ shouldExplode }: { shouldExplode: boolean }) {
   if (shouldExplode) {
@@ -18,7 +19,7 @@ export function App() {
 
   return (
     <main style={{ fontFamily: 'system-ui', padding: 32, maxWidth: 720 }}>
-      <h1>@uxco/glitchtip — React demo</h1>
+      <h1>@webteamuxco/glitchtip-sdk — React demo</h1>
       <p>
         Set <code>VITE_GLITCHTIP_DSN</code> in <code>.env.local</code>, then click any
         button below — the event should land in your GlitchTip project.
@@ -59,6 +60,16 @@ export function App() {
 
         <button onClick={() => setExplode(true)}>
           Trigger ErrorBoundary
+        </button>
+
+        <button
+          onClick={() => {
+            log.info('demo.react.log.info', { from: 'App' });
+            log.warn('demo.react.log.warn', { from: 'App' });
+            log.error('demo.react.log.error', { from: 'App' });
+          }}
+        >
+          Emit logs (info / warn / error)
         </button>
       </section>
 

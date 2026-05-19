@@ -43,7 +43,7 @@ function writeNestSnippet(cwd: string): void {
   }
   writeFileSync(
     file,
-    `import { GlitchtipModule } from '@uxco/glitchtip/nest';\n\nexport const glitchtipModule = GlitchtipModule.forRoot();\n`,
+    `import { GlitchtipModule } from '@webteamuxco/glitchtip-sdk/nest';\n\nexport const glitchtipModule = GlitchtipModule.forRoot();\n`,
   );
   console.log(kleur.green(`✓ wrote ${file}`));
   console.log(kleur.gray('  → import glitchtipModule into AppModule.imports'));
@@ -54,7 +54,7 @@ function writeNextSnippet(cwd: string): void {
   if (!existsSync(instrumentation)) {
     writeFileSync(
       instrumentation,
-      `import { initServer } from '@uxco/glitchtip/next/server';\n\nexport async function register(): Promise<void> {\n  initServer();\n}\n`,
+      `import { initServer } from '@webteamuxco/glitchtip-sdk/next/server';\n\nexport async function register(): Promise<void> {\n  initServer();\n}\n`,
     );
     console.log(kleur.green(`✓ wrote ${instrumentation}`));
   }
@@ -63,7 +63,7 @@ function writeNextSnippet(cwd: string): void {
   if (!existsSync(clientFile)) {
     writeFileSync(
       clientFile,
-      `import { initClient } from '@uxco/glitchtip/next/client';\n\ninitClient();\n`,
+      `import { initClient } from '@webteamuxco/glitchtip-sdk/next/client';\n\ninitClient();\n`,
     );
     console.log(kleur.green(`✓ wrote ${clientFile}`));
   }
@@ -96,12 +96,12 @@ export async function runInit(): Promise<void> {
     return;
   }
 
-  console.log(kleur.bold(`\nSetting up @uxco/glitchtip for ${framework}\n`));
+  console.log(kleur.bold(`\nSetting up @webteamuxco/glitchtip-sdk for ${framework}\n`));
   appendEnvExample(cwd, framework);
   if (framework === 'nest') writeNestSnippet(cwd);
   if (framework === 'next') writeNextSnippet(cwd);
 
   console.log(kleur.bold('\nNext steps:'));
-  console.log(`  1. ${kleur.cyan('pnpm dlx @uxco/glitchtip dev:up')}  ${kleur.gray('# starts a local GlitchTip and writes the DSN to .env')}`);
+  console.log(`  1. ${kleur.cyan('pnpm dlx @webteamuxco/glitchtip-sdk dev:up')}  ${kleur.gray('# starts a local GlitchTip and writes the DSN to .env')}`);
   console.log(`  2. ${kleur.cyan('pnpm dev')}`);
 }

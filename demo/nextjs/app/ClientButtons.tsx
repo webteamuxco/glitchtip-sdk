@@ -1,6 +1,7 @@
 'use client';
 
 import { captureException, captureMessage, setUser } from '@sentry/nextjs';
+import { log } from '@webteamuxco/glitchtip-sdk/next';
 
 export function ClientButtons() {
   return (
@@ -28,6 +29,15 @@ export function ClientButtons() {
       </button>
       <button onClick={() => setUser({ id: 'demo-user-1', email: 'demo@example.com' })}>
         setUser
+      </button>
+      <button
+        onClick={() => {
+          log.info('demo.client.log.info', { from: 'ClientButtons' });
+          log.warn('demo.client.log.warn', { from: 'ClientButtons' });
+          log.error('demo.client.log.error', { from: 'ClientButtons' });
+        }}
+      >
+        Emit logs (info / warn / error)
       </button>
     </div>
   );

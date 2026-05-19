@@ -1,6 +1,6 @@
 # Demos
 
-End-to-end sample apps that consume `@uxco/glitchtip` via a local `file:../..`
+End-to-end sample apps that consume `@webteamuxco/glitchtip-sdk` via a local `file:../..`
 link. These are **not published** to npm — the package's `files` whitelist in
 [`/package.json`](../package.json) only ships `dist/`, `templates/` and the
 top-level `README.md`.
@@ -23,7 +23,7 @@ top-level `README.md`.
 2. Have a GlitchTip DSN ready. You can spin up a local instance with:
 
    ```bash
-   pnpm dlx @uxco/glitchtip dev:up
+   pnpm dlx @webteamuxco/glitchtip-sdk dev:up
    ```
 
 3. `cd demo/<stack>`, copy `.env.example`, install, run.

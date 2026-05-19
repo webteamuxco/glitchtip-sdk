@@ -12,7 +12,7 @@ export const COMPOSE_FILE = resolve(PACKAGE_ROOT, 'templates', 'docker-compose.g
 export function ensureCompose(): void {
   if (!existsSync(COMPOSE_FILE)) {
     console.error(kleur.red(`✗ compose template missing at ${COMPOSE_FILE}`));
-    console.error(kleur.gray('  this looks like a broken @uxco/glitchtip install — try reinstalling'));
+    console.error(kleur.gray('  this looks like a broken @webteamuxco/glitchtip-sdk install — try reinstalling'));
     process.exit(1);
   }
   const probe = spawnSync('docker', ['compose', 'version'], { stdio: 'ignore' });

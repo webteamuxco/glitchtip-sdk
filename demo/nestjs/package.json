@@ -12,7 +12,7 @@
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
     "@sentry/node": "^9.0.0",
-    "@uxco/glitchtip": "file:../..",
+    "@webteamuxco/glitchtip-sdk": "file:../..",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },

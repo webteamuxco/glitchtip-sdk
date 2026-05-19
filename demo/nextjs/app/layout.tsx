@@ -1,5 +1,5 @@
 export const metadata = {
-  title: '@uxco/glitchtip — Next.js demo',
+  title: '@webteamuxco/glitchtip-sdk — Next.js demo',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

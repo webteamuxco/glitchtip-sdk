@@ -1,4 +1,4 @@
-# Local GlitchTip dev stack shipped by @uxco/glitchtip.
+# Local GlitchTip dev stack shipped by @webteamuxco/glitchtip-sdk.
 # Started/stopped by `uxco-glitchtip dev:up` / `dev:down`.
 # Do NOT use these settings in production (weak secret, open registration, debug email).
 

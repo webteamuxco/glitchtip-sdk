@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@sentry/react": "^9.0.0",
-    "@uxco/glitchtip": "file:../..",
+    "@webteamuxco/glitchtip-sdk": "file:../..",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

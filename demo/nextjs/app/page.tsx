@@ -5,7 +5,7 @@ import { throwOnServer } from './actions';
 export default function Home() {
   return (
     <main>
-      <h1>@uxco/glitchtip — Next.js demo</h1>
+      <h1>@webteamuxco/glitchtip-sdk — Next.js demo</h1>
       <p>
         Set <code>GLITCHTIP_DSN</code> and <code>NEXT_PUBLIC_GLITCHTIP_DSN</code> in
         <code> .env.local</code>, then trigger errors below.
@@ -20,6 +20,9 @@ export default function Home() {
       </form>
       <p>
         <Link href="/api/boom">GET /api/boom (server route handler)</Link>
+      </p>
+      <p>
+        <Link href="/api/logs">GET /api/logs (server log API)</Link>
       </p>
     </main>
   );
