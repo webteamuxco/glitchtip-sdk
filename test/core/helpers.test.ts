@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-vi.mock('@sentry/node', () => {
+vi.mock('@sentry/core', () => {
   const setUser = vi.fn();
   const addBreadcrumb = vi.fn();
   const captureException = vi.fn(() => 'event-id-123');
@@ -21,7 +21,7 @@ vi.mock('@sentry/node', () => {
   };
 });
 
-import * as Sentry from '@sentry/node';
+import * as Sentry from '@sentry/core';
 import { addBreadcrumb, captureWithContext, flush, setUser } from '../../src/core/helpers.js';
 
 const mocks = (Sentry as unknown as { __mocks: { setTag: ReturnType<typeof vi.fn>; setExtra: ReturnType<typeof vi.fn>; scopeSetUser: ReturnType<typeof vi.fn> } }).__mocks;

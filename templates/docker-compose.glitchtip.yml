@@ -44,6 +44,7 @@ services:
       DEFAULT_FROM_EMAIL: noreply@glitchtip.local
       ENABLE_OPEN_USER_REGISTRATION: "true"
       CELERY_WORKER_AUTOSCALE: "1,3"
+      GLITCHTIP_ENABLE_LOGS: "True"
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:8000/api/0/"]
       interval: 10s

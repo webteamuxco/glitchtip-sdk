@@ -1,29 +1,30 @@
 import { describe, expect, it, vi } from 'vitest';
 
-vi.mock('@sentry/node', () => ({
-  logger: {
-    trace: vi.fn(),
-    debug: vi.fn(),
-    info: vi.fn(),
-    warn: vi.fn(),
-    error: vi.fn(),
-    fatal: vi.fn(),
-  },
+vi.mock('@sentry/core', () => ({
+  _INTERNAL_captureLog: vi.fn(),
 }));
 
-import * as Sentry from '@sentry/node';
+import { _INTERNAL_captureLog } from '@sentry/core';
 import { log } from '../../src/core/log.js';
 
 describe('log', () => {
   const levels = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'] as const;
 
-  it.each(levels)('forwards %s calls to Sentry.logger with attributes', (level) => {
+  it.each(levels)('forwards %s calls to _INTERNAL_captureLog with attributes', (level) => {
     log[level]('msg', { user: 'mika' });
-    expect(Sentry.logger[level]).toHaveBeenCalledWith('msg', { user: 'mika' });
+    expect(_INTERNAL_captureLog).toHaveBeenCalledWith({
+      level,
+      message: 'msg',
+      attributes: { user: 'mika' },
+    });
   });
 
   it('forwards messages without attributes', () => {
     log.info('hello');
-    expect(Sentry.logger.info).toHaveBeenCalledWith('hello', undefined);
+    expect(_INTERNAL_captureLog).toHaveBeenCalledWith({
+      level: 'info',
+      message: 'hello',
+      attributes: undefined,
+    });
   });
 });
