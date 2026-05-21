@@ -3,6 +3,7 @@ import { defineConfig } from 'tsup';
 export default defineConfig({
   entry: {
     'core/index': 'src/core/index.ts',
+    'core/index.browser': 'src/core/index.browser.ts',
     'nest/index': 'src/nest/index.ts',
     'next/index': 'src/next/index.ts',
     'next/client': 'src/next/client.ts',
@@ -17,6 +18,7 @@ export default defineConfig({
   splitting: false,
   target: 'node20',
   external: [
+    '@sentry/core',
     '@sentry/node',
     '@sentry/nextjs',
     '@sentry/react',

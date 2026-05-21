@@ -106,12 +106,27 @@ initClient();
 ## Manual usage
 
 ```ts
-import { initErrorTracking, captureWithContext, setUser } from '@webteamuxco/glitchtip-sdk';
+import { initErrorTracking, captureWithContext, setUser, log } from '@webteamuxco/glitchtip-sdk';
 
 initErrorTracking();
 setUser({ id: user.id, email: user.email });
 captureWithContext(err, { tags: { feature: 'checkout' } });
+log.info('checkout completed', { orderId: '123' });
 ```
+
+### Isomorphic helpers
+
+The root entry (`@webteamuxco/glitchtip-sdk`) exposes `captureWithContext`,
+`setUser`, `addBreadcrumb`, `flush` and `log` on top of `@sentry/core`, so it
+can be imported from both server and browser code (Next.js Client Components,
+React apps bundled for the browser, etc.) without pulling `@sentry/node`.
+
+Bundlers select the right build via the `browser` export condition:
+
+- Node (server) → `dist/core/index.js` (includes `initErrorTracking`).
+- Browser bundle → `dist/core/index.browser.js` (no `@sentry/node`; calling
+  `initErrorTracking()` throws — use `initClient` from `./next/client` or
+  `./react` instead).
 
 ## Defaults applied
 

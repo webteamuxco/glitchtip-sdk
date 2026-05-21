@@ -2,6 +2,10 @@ import * as Sentry from '@sentry/nextjs';
 import { resolveDefaults, type UxcoTrackingOptions } from '../core/defaults.js';
 
 export function initClient(opts: UxcoTrackingOptions = {}): void {
+  const publicEnableLogs =
+    process.env.NEXT_PUBLIC_GLITCHTIP_ENABLE_LOGS === 'true' ||
+    process.env.NEXT_PUBLIC_SENTRY_ENABLE_LOGS === 'true';
+
   const config = resolveDefaults({
     ...opts,
     dsn:
@@ -10,6 +14,7 @@ export function initClient(opts: UxcoTrackingOptions = {}): void {
       process.env.NEXT_PUBLIC_GLITCHTIP_DSN ??
       process.env.SENTRY_DSN ??
       process.env.GLITCHTIP_DSN,
+    enableLogs: opts.enableLogs ?? (publicEnableLogs || undefined),
   });
   if (!config.enabled || !config.dsn) return;
 
