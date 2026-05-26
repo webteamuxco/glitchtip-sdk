@@ -106,20 +106,42 @@ initClient();
 ## Manual usage
 
 ```ts
-import { initErrorTracking, captureWithContext, setUser, log } from '@webteamuxco/glitchtip-sdk';
+import {
+  initErrorTracking,
+  captureWithContext,
+  captureMessage,
+  setUser,
+  log,
+} from '@webteamuxco/glitchtip-sdk';
 
 initErrorTracking();
 setUser({ id: user.id, email: user.email });
+
+// Exception with a stack trace, classified as an "error" issue by default.
 captureWithContext(err, { tags: { feature: 'checkout' } });
+
+// Same exception, but classified as a "warning" issue (non-blocking).
+captureWithContext(err, { level: 'warning', tags: { feature: 'checkout' } });
+
+// Text-only event (no stack trace) — surfaces a warning/info/fatal "issue".
+captureMessage('Stock low for SKU 42', { level: 'warning', extra: { sku: 42 } });
+
 log.info('checkout completed', { orderId: '123' });
 ```
+
+`captureMessage` and the `level` option on `captureWithContext` accept any of
+`'fatal' | 'error' | 'warning' | 'info' | 'debug'` (exported as the
+`CaptureLevel` type). Use them to distinguish actionable errors from softer
+signals (warnings, info notices) in the GlitchTip issues list, separately from
+the `log` stream.
 
 ### Isomorphic helpers
 
 The root entry (`@webteamuxco/glitchtip-sdk`) exposes `captureWithContext`,
-`setUser`, `addBreadcrumb`, `flush` and `log` on top of `@sentry/core`, so it
-can be imported from both server and browser code (Next.js Client Components,
-React apps bundled for the browser, etc.) without pulling `@sentry/node`.
+`captureMessage`, `setUser`, `addBreadcrumb`, `flush` and `log` on top of
+`@sentry/core`, so it can be imported from both server and browser code
+(Next.js Client Components, React apps bundled for the browser, etc.) without
+pulling `@sentry/node`.
 
 Bundlers select the right build via the `browser` export condition:
 

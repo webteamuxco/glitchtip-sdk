@@ -4,27 +4,43 @@ vi.mock('@sentry/core', () => {
   const setUser = vi.fn();
   const addBreadcrumb = vi.fn();
   const captureException = vi.fn(() => 'event-id-123');
+  const captureMessage = vi.fn(() => 'event-id-456');
   const flush = vi.fn(async () => true);
   const setTag = vi.fn();
   const setExtra = vi.fn();
   const scopeSetUser = vi.fn();
+  const setLevel = vi.fn();
   const withScope = vi.fn((cb: (scope: unknown) => unknown) =>
-    cb({ setTag, setExtra, setUser: scopeSetUser }),
+    cb({ setTag, setExtra, setUser: scopeSetUser, setLevel }),
   );
   return {
     setUser,
     addBreadcrumb,
     captureException,
+    captureMessage,
     flush,
     withScope,
-    __mocks: { setTag, setExtra, scopeSetUser },
+    __mocks: { setTag, setExtra, scopeSetUser, setLevel },
   };
 });
 
 import * as Sentry from '@sentry/core';
-import { addBreadcrumb, captureWithContext, flush, setUser } from '../../src/core/helpers.js';
+import {
+  addBreadcrumb,
+  captureMessage,
+  captureWithContext,
+  flush,
+  setUser,
+} from '../../src/core/helpers.js';
 
-const mocks = (Sentry as unknown as { __mocks: { setTag: ReturnType<typeof vi.fn>; setExtra: ReturnType<typeof vi.fn>; scopeSetUser: ReturnType<typeof vi.fn> } }).__mocks;
+const mocks = (Sentry as unknown as {
+  __mocks: {
+    setTag: ReturnType<typeof vi.fn>;
+    setExtra: ReturnType<typeof vi.fn>;
+    scopeSetUser: ReturnType<typeof vi.fn>;
+    setLevel: ReturnType<typeof vi.fn>;
+  };
+}).__mocks;
 
 describe('setUser', () => {
   it('forwards user object to Sentry', () => {
@@ -86,6 +102,38 @@ describe('captureWithContext', () => {
     expect(mocks.setTag).not.toHaveBeenCalled();
     expect(mocks.setExtra).not.toHaveBeenCalled();
     expect(mocks.scopeSetUser).not.toHaveBeenCalled();
+    expect(mocks.setLevel).not.toHaveBeenCalled();
+  });
+
+  it('forwards the level to the scope when provided', () => {
+    captureWithContext(new Error('warn'), { level: 'warning' });
+    expect(mocks.setLevel).toHaveBeenCalledWith('warning');
+  });
+});
+
+describe('captureMessage', () => {
+  it('captures the message with the default info level and returns the event id', () => {
+    const id = captureMessage('hello world');
+    expect(Sentry.captureMessage).toHaveBeenCalledWith('hello world', 'info');
+    expect(id).toBe('event-id-456');
+  });
+
+  it('forwards a custom level both to the scope and to captureMessage', () => {
+    captureMessage('something off', { level: 'warning' });
+    expect(mocks.setLevel).toHaveBeenCalledWith('warning');
+    expect(Sentry.captureMessage).toHaveBeenCalledWith('something off', 'warning');
+  });
+
+  it('sets tags, extras, and user on the scope', () => {
+    captureMessage('info notice', {
+      level: 'info',
+      tags: { feature: 'checkout' },
+      extra: { orderId: '42' },
+      user: { id: 9 },
+    });
+    expect(mocks.setTag).toHaveBeenCalledWith('feature', 'checkout');
+    expect(mocks.setExtra).toHaveBeenCalledWith('orderId', '42');
+    expect(mocks.scopeSetUser).toHaveBeenCalledWith({ id: 9 });
   });
 });
 
