@@ -8,8 +8,8 @@ Each page contains snippets you can drop into a project, intentionally-broken ro
 
 | # | File | For who? |
 | - | ---- | -------- |
-| 0 | [00-onboarding.md](./00-onboarding.md) | Everyone — full step-by-step (PAT, `.npmrc`, install, DSN, wiring, CI) with placeholder variables |
-| 1 | [01-installation.md](./01-installation.md) | Everyone — install the package, configure the GitHub Packages registry |
+| 0 | [00-onboarding.md](./00-onboarding.md) | Everyone — full step-by-step (install, DSN, wiring, CI) with placeholder variables |
+| 1 | [01-installation.md](./01-installation.md) | Everyone — install the package from npm |
 | 2 | [02-local-dev.md](./02-local-dev.md) | Everyone — spin up a local GlitchTip instance with Docker |
 | 3 | [03-nestjs.md](./03-nestjs.md) | NestJS projects (API / backend) |
 | 4 | [04-nextjs.md](./04-nextjs.md) | Next.js projects (App Router & Pages Router) |
@@ -21,19 +21,15 @@ Each page contains snippets you can drop into a project, intentionally-broken ro
 ## TL;DR
 
 ```bash
-# 1. Configure the registry (.npmrc in the consuming project)
-echo "@webteamuxco:registry=https://npm.pkg.github.com" >> .npmrc
-echo "//npm.pkg.github.com/:_authToken=\${GITHUB_TOKEN}" >> .npmrc
-
-# 2. Install the SDK + the matching Sentry peer
+# 1. Install the SDK + the matching Sentry peer (public package, no auth needed)
 pnpm add @webteamuxco/glitchtip-sdk @sentry/node          # NestJS / Node
 pnpm add @webteamuxco/glitchtip-sdk @sentry/nextjs        # Next.js
 pnpm add @webteamuxco/glitchtip-sdk @sentry/react         # React SPA
 
-# 3. Start GlitchTip locally (writes the DSN into .env)
+# 2. Start GlitchTip locally (writes the DSN into .env)
 pnpm dlx @webteamuxco/glitchtip-sdk dev:up
 
-# 4. Scaffold the integration (env.example + bootstrap file)
+# 3. Scaffold the integration (env.example + bootstrap file)
 pnpm dlx @webteamuxco/glitchtip-sdk init
 ```
 

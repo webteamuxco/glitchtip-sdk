@@ -7,13 +7,9 @@ Next.js integrations.
 
 ## Install
 
-This package is published to GitHub Packages. Add a `.npmrc` to the consumer
-project (see `.npmrc.example`):
-
-```ini
-@webteamuxco:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-```
+This package is published publicly on
+[npm](https://www.npmjs.com/package/@webteamuxco/glitchtip-sdk) — no registry
+configuration or auth token required.
 
 FIRST: see [Onboarding](./docs/00-onboarding.md)
 
@@ -161,7 +157,7 @@ All overridable via `initErrorTracking(opts)` or `GlitchtipModule.forRoot(opts)`
 
 ## Releasing
 
-Tag with `v*` and push — the GitHub Action publishes to GitHub Packages.
+Tag with `v*` and push — the GitHub Action publishes publicly to npm.
 
 ```bash
 pnpm version patch

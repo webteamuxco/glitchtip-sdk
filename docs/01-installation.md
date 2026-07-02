@@ -1,25 +1,8 @@
 # 1. Installation
 
-The package is published on **GitHub Packages** under the `@webteamuxco` scope. The registry only needs to be configured once per project.
+The package is published **publicly on [npm](https://www.npmjs.com/package/@webteamuxco/glitchtip-sdk)** under the `@webteamuxco` scope. No registry configuration or auth token is required — install it like any public package.
 
-## 1.1 Configure the registry
-
-At the root of the consuming project, create an `.npmrc` file:
-
-```ini
-@webteamuxco:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-```
-
-Then export `GITHUB_TOKEN` (a classic PAT with the `read:packages` scope):
-
-```bash
-export GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxx
-```
-
-> In CI, expose `GITHUB_TOKEN` through the runner's secrets. On GitHub Actions, `secrets.GITHUB_TOKEN` works out of the box if the repo has access to the package.
-
-## 1.2 Install the package
+## 1.1 Install the package
 
 The SDK declares all Sentry peers as **optional** — install only the one you need.
 
@@ -47,7 +30,7 @@ pnpm add @webteamuxco/glitchtip-sdk @sentry/react
 pnpm add @webteamuxco/glitchtip-sdk @sentry/node
 ```
 
-## 1.3 Scaffold the integration (optional)
+## 1.2 Scaffold the integration (optional)
 
 The `init` command detects the framework from `package.json` and writes:
 
@@ -61,7 +44,7 @@ pnpm dlx @webteamuxco/glitchtip-sdk init
 
 > `init` does not touch `AppModule.ts` or `layout.tsx` — you still need to wire the bootstrap by hand (see framework-specific pages).
 
-## 1.4 Environment variables
+## 1.3 Environment variables
 
 | Variable | Side | Purpose |
 | -------- | ---- | ------- |

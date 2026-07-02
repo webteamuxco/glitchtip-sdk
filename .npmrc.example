@@ -1,4 +1,0 @@
-# Copy this to .npmrc in any project that consumes @webteamuxco/glitchtip-sdk.
-# GITHUB_TOKEN must have at least `read:packages` scope (and `write:packages` to publish).
-@webteamuxco:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
