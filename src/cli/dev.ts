@@ -6,6 +6,7 @@ import { compose, ensureCompose, waitForWebHealthy } from './docker.js';
 import { authenticate, ensureOrganization, ensureProject, ensureTeam } from './api.js';
 
 const PORT = Number(process.env.GLITCHTIP_PORT ?? 8000);
+const MAILPIT_PORT = Number(process.env.MAILPIT_PORT ?? 8025);
 
 export async function devUp(opts: { skipDsn?: boolean } = {}): Promise<void> {
   ensureCompose();
@@ -18,7 +19,7 @@ export async function devUp(opts: { skipDsn?: boolean } = {}): Promise<void> {
     process.exit(migrate);
   }
 
-  const up = await compose(['up', '-d', 'postgres', 'redis', 'web', 'worker']);
+  const up = await compose(['up', '-d', 'postgres', 'redis', 'mailpit', 'web', 'worker']);
   if (up !== 0) process.exit(up);
 
   console.log(kleur.gray(`waiting for http://localhost:${PORT} to become healthy...`));
@@ -29,6 +30,7 @@ export async function devUp(opts: { skipDsn?: boolean } = {}): Promise<void> {
     process.exit(1);
   }
   console.log(kleur.green(`✓ GlitchTip ready at http://localhost:${PORT}`));
+  console.log(kleur.gray(`  📬 Mailpit (test inbox for alert emails): http://localhost:${MAILPIT_PORT}`));
 
   if (opts.skipDsn) return;
   await provisionDsn();
@@ -42,7 +44,7 @@ export async function devDown(): Promise<void> {
 
 export async function devLogs(): Promise<void> {
   ensureCompose();
-  const code = await compose(['logs', '-f', '--tail=100', 'web', 'worker']);
+  const code = await compose(['logs', '-f', '--tail=100', 'web', 'worker', 'mailpit']);
   process.exit(code);
 }
 

@@ -46,11 +46,16 @@ What `dev:up` does:
 
 1. Checks that `docker compose` is available
 2. Runs migrations (one-shot container)
-3. Starts `postgres`, `redis`, `web`, `worker`
+3. Starts `postgres`, `redis`, `mailpit`, `web`, `worker`
 4. Waits for `http://localhost:8000` to be healthy (up to 2 min)
 5. Prompts for admin email/password, org name, project name
 6. Calls the GlitchTip API to register the user, create org/team/project, fetch the DSN
 7. Writes `GLITCHTIP_DSN=` into your `.env.local` (or `.env`)
+
+Alert notification emails (and any other mail GlitchTip sends) are captured by a
+local **Mailpit** inbox at `http://localhost:8025` — nothing is delivered
+externally. See [docs/02-local-dev.md §2.6](./docs/02-local-dev.md) to test an
+alert end-to-end. Override the port with `MAILPIT_PORT=8125`.
 
 Override the port with `GLITCHTIP_PORT=8100 pnpm dlx @webteamuxco/glitchtip-sdk dev:up`.
 

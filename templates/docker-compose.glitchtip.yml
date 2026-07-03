@@ -27,11 +27,27 @@ services:
       timeout: 3s
       retries: 10
 
+  # Catches every email GlitchTip sends (alert notifications, invites, etc.)
+  # instead of delivering it. Open the web UI to read them.
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "${MAILPIT_PORT:-8025}:8025"   # web UI
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: "true"
+      MP_SMTP_AUTH_ALLOW_INSECURE: "true"
+    healthcheck:
+      test: ["CMD", "/mailpit", "readyz"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
   web:
     image: glitchtip/glitchtip:latest
     depends_on:
       postgres: { condition: service_healthy }
       redis: { condition: service_healthy }
+      mailpit: { condition: service_started }
     ports:
       - "${GLITCHTIP_PORT:-8000}:8000"
     environment: &gt-env
@@ -39,7 +55,9 @@ services:
       REDIS_URL: redis://redis:6379/0
       SECRET_KEY: dev-only-not-for-prod-change-me
       PORT: "8000"
-      EMAIL_URL: consolemail://
+      # Route all outgoing mail (alerts, invites, password resets) to the local
+      # Mailpit catcher — inspect it at http://localhost:${MAILPIT_PORT:-8025}
+      EMAIL_URL: smtp://mailpit:1025
       GLITCHTIP_DOMAIN: http://localhost:${GLITCHTIP_PORT:-8000}
       DEFAULT_FROM_EMAIL: noreply@glitchtip.local
       ENABLE_OPEN_USER_REGISTRATION: "true"
@@ -58,6 +76,7 @@ services:
     depends_on:
       postgres: { condition: service_healthy }
       redis: { condition: service_healthy }
+      mailpit: { condition: service_started }
     environment: *gt-env
 
   migrate:
