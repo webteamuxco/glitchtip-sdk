@@ -136,6 +136,47 @@ log.info('checkout completed', { orderId: '123' });
 signals (warnings, info notices) in the GlitchTip issues list, separately from
 the `log` stream.
 
+### Making an issue readable in the list
+
+A GlitchTip issue row renders **the title and the culprit** — and nothing else.
+Tags never appear there; they are a *search* mechanism, not a display one. So
+where a value goes decides whether you can see it or only find it:
+
+| Option | Where it lands | What it is for |
+| --- | --- | --- |
+| `tags` | searchable only | filtering the list: `source:ai-agent`, `has:source` |
+| `transaction` | **culprit**, 2nd line of the row | naming the operation that failed |
+| `fingerprint` | grouping key | keeping one problem in one issue |
+| `extra` | issue detail only | payloads you read once you have opened the issue |
+
+```ts
+captureWithContext(err, {
+  transaction: 'ai-agent/sendMessage',   // shown under the title
+  tags: { source: 'ai-agent' },          // filter with `source:ai-agent`
+  extra: { conversationId },             // visible in the detail view
+});
+```
+
+Filter syntax in the issue search bar: any `key:value` that is not `is:`,
+`has:` or `level:` is matched against tags, exact value, and a free-text term
+must come last. Values containing spaces need quoting: `operation:"my op"`.
+
+Two grouping rules worth knowing, since GlitchTip hashes issues on
+`(title, culprit, type, fingerprint)`:
+
+- `transaction` **splits** issues — the same error raised by two operations
+  becomes two issues. Usually desirable.
+- A variable part in a message (an id, a retry delay) also splits issues, one
+  per value. Either keep the value out of the message and put it in `extra`, or
+  pin the grouping:
+
+```ts
+captureMessage(`Rate limited, retry in ${retryAfter}s`, {
+  level: 'warning',
+  fingerprint: ['ai-agent', 'rate-limit'],   // one issue, whatever the delay
+});
+```
+
 ### Isomorphic helpers
 
 The root entry (`@webteamuxco/glitchtip-sdk`) exposes `captureWithContext`,

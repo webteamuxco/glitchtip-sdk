@@ -1,6 +1,6 @@
 {
   "name": "@webteamuxco/glitchtip-sdk",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "UXCO error tracking SDK — pre-configured GlitchTip/Sentry wrapper for NestJS and Next.js",
   "license": "MIT",
   "private": false,

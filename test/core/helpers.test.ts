@@ -10,8 +10,10 @@ vi.mock('@sentry/core', () => {
   const setExtra = vi.fn();
   const scopeSetUser = vi.fn();
   const setLevel = vi.fn();
+  const setTransactionName = vi.fn();
+  const setFingerprint = vi.fn();
   const withScope = vi.fn((cb: (scope: unknown) => unknown) =>
-    cb({ setTag, setExtra, setUser: scopeSetUser, setLevel }),
+    cb({ setTag, setExtra, setUser: scopeSetUser, setLevel, setTransactionName, setFingerprint }),
   );
   return {
     setUser,
@@ -20,7 +22,7 @@ vi.mock('@sentry/core', () => {
     captureMessage,
     flush,
     withScope,
-    __mocks: { setTag, setExtra, scopeSetUser, setLevel },
+    __mocks: { setTag, setExtra, scopeSetUser, setLevel, setTransactionName, setFingerprint },
   };
 });
 
@@ -39,6 +41,8 @@ const mocks = (Sentry as unknown as {
     setExtra: ReturnType<typeof vi.fn>;
     scopeSetUser: ReturnType<typeof vi.fn>;
     setLevel: ReturnType<typeof vi.fn>;
+    setTransactionName: ReturnType<typeof vi.fn>;
+    setFingerprint: ReturnType<typeof vi.fn>;
   };
 }).__mocks;
 
@@ -103,11 +107,33 @@ describe('captureWithContext', () => {
     expect(mocks.setExtra).not.toHaveBeenCalled();
     expect(mocks.scopeSetUser).not.toHaveBeenCalled();
     expect(mocks.setLevel).not.toHaveBeenCalled();
+    expect(mocks.setTransactionName).not.toHaveBeenCalled();
+    expect(mocks.setFingerprint).not.toHaveBeenCalled();
   });
 
   it('forwards the level to the scope when provided', () => {
     captureWithContext(new Error('warn'), { level: 'warning' });
     expect(mocks.setLevel).toHaveBeenCalledWith('warning');
+  });
+
+  it('forwards the transaction to the scope, which GlitchTip renders as the culprit', () => {
+    captureWithContext(new Error('x'), { transaction: 'ai-agent/sendMessage' });
+    expect(mocks.setTransactionName).toHaveBeenCalledWith('ai-agent/sendMessage');
+  });
+
+  it('ignores an empty transaction rather than clearing the culprit', () => {
+    captureWithContext(new Error('x'), { transaction: '' });
+    expect(mocks.setTransactionName).not.toHaveBeenCalled();
+  });
+
+  it('forwards the fingerprint to the scope when provided', () => {
+    captureWithContext(new Error('x'), { fingerprint: ['ai-agent', 'rate-limit'] });
+    expect(mocks.setFingerprint).toHaveBeenCalledWith(['ai-agent', 'rate-limit']);
+  });
+
+  it('ignores an empty fingerprint array rather than wiping the default grouping', () => {
+    captureWithContext(new Error('x'), { fingerprint: [] });
+    expect(mocks.setFingerprint).not.toHaveBeenCalled();
   });
 });
 
@@ -134,6 +160,17 @@ describe('captureMessage', () => {
     expect(mocks.setTag).toHaveBeenCalledWith('feature', 'checkout');
     expect(mocks.setExtra).toHaveBeenCalledWith('orderId', '42');
     expect(mocks.scopeSetUser).toHaveBeenCalledWith({ id: 9 });
+  });
+
+  it('applies transaction and fingerprint before capturing the message', () => {
+    captureMessage('Rate limited', {
+      level: 'warning',
+      transaction: 'ai-agent/sendMessage',
+      fingerprint: ['ai-agent', 'rate-limit'],
+    });
+    expect(mocks.setTransactionName).toHaveBeenCalledWith('ai-agent/sendMessage');
+    expect(mocks.setFingerprint).toHaveBeenCalledWith(['ai-agent', 'rate-limit']);
+    expect(Sentry.captureMessage).toHaveBeenCalledWith('Rate limited', 'warning');
   });
 });
 

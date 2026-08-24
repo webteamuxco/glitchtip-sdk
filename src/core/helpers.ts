@@ -26,6 +26,26 @@ export interface CaptureContext {
   extra?: Record<string, unknown>;
   user?: UxcoUser;
   level?: CaptureLevel;
+  /**
+   * Logical operation the event belongs to (`'POST /api/booking'`,
+   * `'ai-agent/sendMessage'`). GlitchTip stores it as the issue's **culprit**
+   * and renders it under the title in the issue list — unlike tags, which are
+   * only reachable through search. Use it to make a list row self-describing.
+   *
+   * Note that the culprit takes part in issue grouping, so two operations
+   * raising the same error produce two issues. That is usually what you want;
+   * override it with `fingerprint` when it is not.
+   */
+  transaction?: string;
+  /**
+   * Explicit grouping key. Events sharing a fingerprint collapse into one
+   * issue, whatever their message or culprit. Include `'{{ default }}'` to
+   * extend the default grouping instead of replacing it.
+   *
+   * Use it when a message carries a variable part (an id, a retry delay) that
+   * would otherwise split one problem across many issues.
+   */
+  fingerprint?: string[];
 }
 
 export function setUser(user: UxcoUser | null): void {
@@ -38,6 +58,8 @@ export function addBreadcrumb(message: string, data?: Record<string, unknown>, c
 
 function applyContext(scope: Scope, context: CaptureContext): void {
   if (context.level) scope.setLevel(context.level);
+  if (context.transaction) scope.setTransactionName(context.transaction);
+  if (context.fingerprint?.length) scope.setFingerprint(context.fingerprint);
   if (context.tags) {
     for (const [k, v] of Object.entries(context.tags)) scope.setTag(k, v);
   }
