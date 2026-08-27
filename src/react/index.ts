@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/react';
+
 import {
   BrowserClient,
   Scope,
@@ -11,6 +12,13 @@ import {
   resolveDefaults,
   type UxcoTrackingOptions,
 } from '../core/defaults.js';
+
+import {
+  captureMessage,
+  captureWithContext,
+  type CaptureContext,
+  type UxcoUser,
+} from '../core/helpers.js';
 
 export interface ReactInitOptions extends UxcoTrackingOptions {
   tracePropagationTargets?: (string | RegExp)[];
@@ -32,14 +40,19 @@ export function initClient(opts: ReactInitOptions = {}): void {
     tracesSampleRate: config.tracesSampleRate,
     debug: config.debug,
     ignoreErrors: config.ignoreErrors,
+
     beforeSend: config.beforeSend as NonNullable<
       Parameters<typeof Sentry.init>[0]
     >['beforeSend'],
+
     enableLogs: config.enableLogs,
+
     beforeSendLog: config.beforeSendLog as NonNullable<
       Parameters<typeof Sentry.init>[0]
     >['beforeSendLog'],
+
     integrations: [Sentry.browserTracingIntegration()],
+
     tracePropagationTargets:
       opts.tracePropagationTargets ?? ['localhost', /^\//],
   });
@@ -76,7 +89,36 @@ export function createClient(opts: ReactInitOptions = {}) {
 
   client.init();
 
-  return scope;
+  return {
+    captureMessage: (
+      message: string,
+      context?: CaptureContext,
+    ) => captureMessage(message, context, scope),
+
+    captureWithContext: (
+      error: unknown,
+      context?: CaptureContext,
+    ) => captureWithContext(error, context, scope),
+
+    setUser: (user: UxcoUser | null) => {
+      scope.setUser(user as Parameters<typeof scope.setUser>[0]);
+    },
+
+    addBreadcrumb: (
+      message: string,
+      data?: Record<string, unknown>,
+      category = 'app',
+    ) => {
+      scope.addBreadcrumb({
+        message,
+        data,
+        category,
+        level: 'info',
+      });
+    },
+
+    flush: (timeoutMs = 2000) => client.flush(timeoutMs),
+  };
 }
 
 type LogAttributes = Record<string, unknown>;
@@ -104,10 +146,10 @@ export {
   withErrorBoundary,
   withProfiler,
   captureException,
-  captureMessage,
-  setUser,
+  captureMessage as sentryCaptureMessage,
+  setUser as sentrySetUser,
   setTag,
-  addBreadcrumb,
+  addBreadcrumb as sentryAddBreadcrumb,
 } from '@sentry/react';
 
 export type { UxcoTrackingOptions } from '../core/defaults.js';
