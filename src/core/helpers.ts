@@ -69,7 +69,16 @@ function applyContext(scope: Scope, context: CaptureContext): void {
   if (context.user) scope.setUser(context.user as Parameters<typeof scope.setUser>[0]);
 }
 
-export function captureWithContext(error: unknown, context: CaptureContext = {}): string | undefined {
+export function captureWithContext(
+  error: unknown,
+  context: CaptureContext = {},
+  scope?: Scope,
+): string | undefined {
+  if (scope) {
+    applyContext(scope, context);
+    return scope.captureException(error);
+  }
+
   return withScope((scope: Scope) => {
     applyContext(scope, context);
     return captureException(error);
@@ -83,7 +92,16 @@ export function captureWithContext(error: unknown, context: CaptureContext = {})
  *
  * Defaults to `info` when no level is provided.
  */
-export function captureMessage(message: string, context: CaptureContext = {}): string | undefined {
+export function captureMessage(
+  message: string,
+  context: CaptureContext = {},
+  scope?: Scope,
+): string | undefined {
+  if (scope) {
+    applyContext(scope, context);
+    return scope.captureMessage(message, context.level ?? 'info');
+  }
+
   return withScope((scope: Scope) => {
     applyContext(scope, context);
     return sentryCaptureMessage(message, context.level ?? 'info');

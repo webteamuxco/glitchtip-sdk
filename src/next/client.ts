@@ -11,6 +11,7 @@ import {
   resolveDefaults,
   type UxcoTrackingOptions,
 } from '../core/defaults.js';
+import { CaptureContext, captureMessage, captureWithContext, UxcoUser } from '../core/helpers.js';
 
 function resolveClientConfig(opts: UxcoTrackingOptions = {}) {
   const publicEnableLogs =
@@ -50,7 +51,6 @@ export function initClient(opts: UxcoTrackingOptions = {}): void {
     >['beforeSendLog'],
   });
 }
-
 export function createClient(opts: UxcoTrackingOptions = {}) {
   const config = resolveClientConfig(opts);
 
@@ -82,5 +82,34 @@ export function createClient(opts: UxcoTrackingOptions = {}) {
 
   client.init();
 
-  return scope;
+  return {
+    captureMessage: (
+      message: string,
+      context?: CaptureContext,
+    ) => captureMessage(message, context, scope),
+
+    captureWithContext: (
+      error: unknown,
+      context?: CaptureContext,
+    ) => captureWithContext(error, context, scope),
+
+    setUser: (user: UxcoUser | null) => {
+      scope.setUser(user as Parameters<typeof scope.setUser>[0]);
+    },
+
+    addBreadcrumb: (
+      message: string,
+      data?: Record<string, unknown>,
+      category = 'app',
+    ) => {
+      scope.addBreadcrumb({
+        message,
+        data,
+        category,
+        level: 'info',
+      });
+    },
+
+    flush: (timeoutMs = 2000) => client.flush(timeoutMs),
+  };
 }
