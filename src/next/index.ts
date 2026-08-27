@@ -5,7 +5,10 @@ export {
   setUser,
   addBreadcrumb,
   captureWithContext,
+  captureMessage,
   flush,
   type UxcoUser,
+  type CaptureLevel,
+  type CaptureContext,
 } from '../core/helpers.js';
 export type { UxcoTrackingOptions } from '../core/defaults.js';

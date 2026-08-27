@@ -1,12 +1,28 @@
 import * as Sentry from '@sentry/react';
-import { resolveDefaults, type UxcoTrackingOptions } from '../core/defaults.js';
+import {
+  BrowserClient,
+  Scope,
+  defaultStackParser,
+  getDefaultIntegrations,
+  makeFetchTransport,
+} from '@sentry/browser';
+
+import {
+  resolveDefaults,
+  type UxcoTrackingOptions,
+} from '../core/defaults.js';
 
 export interface ReactInitOptions extends UxcoTrackingOptions {
   tracePropagationTargets?: (string | RegExp)[];
 }
 
+function resolveClientConfig(opts: ReactInitOptions = {}) {
+  return resolveDefaults(opts);
+}
+
 export function initClient(opts: ReactInitOptions = {}): void {
-  const config = resolveDefaults(opts);
+  const config = resolveClientConfig(opts);
+
   if (!config.enabled || !config.dsn) return;
 
   Sentry.init({
@@ -16,12 +32,51 @@ export function initClient(opts: ReactInitOptions = {}): void {
     tracesSampleRate: config.tracesSampleRate,
     debug: config.debug,
     ignoreErrors: config.ignoreErrors,
-    beforeSend: config.beforeSend as NonNullable<Parameters<typeof Sentry.init>[0]>['beforeSend'],
+    beforeSend: config.beforeSend as NonNullable<
+      Parameters<typeof Sentry.init>[0]
+    >['beforeSend'],
     enableLogs: config.enableLogs,
-    beforeSendLog: config.beforeSendLog as NonNullable<Parameters<typeof Sentry.init>[0]>['beforeSendLog'],
+    beforeSendLog: config.beforeSendLog as NonNullable<
+      Parameters<typeof Sentry.init>[0]
+    >['beforeSendLog'],
     integrations: [Sentry.browserTracingIntegration()],
-    tracePropagationTargets: opts.tracePropagationTargets ?? ['localhost', /^\//],
+    tracePropagationTargets:
+      opts.tracePropagationTargets ?? ['localhost', /^\//],
   });
+}
+
+export function createClient(opts: ReactInitOptions = {}) {
+  const config = resolveClientConfig(opts);
+
+  if (!config.enabled || !config.dsn) {
+    return null;
+  }
+
+  const client = new BrowserClient({
+    dsn: config.dsn,
+    environment: config.environment,
+    release: config.release,
+
+    integrations: getDefaultIntegrations({}),
+    transport: makeFetchTransport,
+    stackParser: defaultStackParser,
+
+    tracesSampleRate: config.tracesSampleRate,
+    debug: config.debug,
+    ignoreErrors: config.ignoreErrors,
+
+    beforeSend: config.beforeSend as NonNullable<
+      Parameters<typeof Sentry.init>[0]
+    >['beforeSend'],
+  });
+
+  const scope = new Scope();
+
+  scope.setClient(client);
+
+  client.init();
+
+  return scope;
 }
 
 type LogAttributes = Record<string, unknown>;

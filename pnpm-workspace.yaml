@@ -1,0 +1,5 @@
+allowBuilds:
+  '@nestjs/core': false
+  '@sentry/cli': false
+  esbuild: false
+  sharp: false
