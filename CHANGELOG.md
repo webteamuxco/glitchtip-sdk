@@ -5,6 +5,20 @@ Toutes les évolutions notables de la plateforme UXCO Booking sont documentées 
 Format basé sur [Keep a Changelog](https://keepachangelog.com/) et
 [Conventional Commits](https://www.conventionalcommits.org/).
 
+## [1.0.0] - 2026-09-03
+
+### 📚 Documentation
+
+- **(release)** Update CHANGELOG.md [skip ci]
+
+### 📦 Build & dépendances
+
+- **(core)** Bump to 1.0.0
+
+### 🚀 Nouveautés
+
+- **(react-native)** Sentry react native sdk
+
 ## [0.2.2] - 2026-08-27
 
 ### 📚 Documentation
