@@ -24,11 +24,13 @@ pnpm add @webteamuxco/glitchtip-sdk @sentry/nextjs
 pnpm add @webteamuxco/glitchtip-sdk @sentry/react
 ```
 
-### Plain Node worker / script
+### Plain Node (Express, Fastify, worker, script)
 
 ```bash
 pnpm add @webteamuxco/glitchtip-sdk @sentry/node
 ```
+
+Then import from `@webteamuxco/glitchtip-sdk/node` — see [06-node.md](./06-node.md).
 
 ## 1.2 Scaffold the integration (optional)
 

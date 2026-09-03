@@ -1,7 +1,7 @@
 {
   "name": "@webteamuxco/glitchtip-sdk",
-  "version": "1.0.0",
-  "description": "UXCO error tracking SDK — pre-configured GlitchTip/Sentry wrapper for NestJS and Next.js",
+  "version": "1.1.0",
+  "description": "UXCO error tracking SDK — pre-configured GlitchTip/Sentry wrapper for NestJS, Next.js, React and Node",
   "license": "MIT",
   "private": false,
   "type": "module",
@@ -42,6 +42,11 @@
       "types": "./dist/next/server.d.ts",
       "import": "./dist/next/server.js",
       "require": "./dist/next/server.cjs"
+    },
+    "./node": {
+      "types": "./dist/node/index.d.ts",
+      "import": "./dist/node/index.js",
+      "require": "./dist/node/index.cjs"
     },
     "./react": {
       "types": "./dist/react/index.d.ts",

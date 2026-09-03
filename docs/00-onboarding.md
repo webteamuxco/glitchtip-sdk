@@ -126,7 +126,7 @@ Follow the page matching your stack:
 | NestJS | [03-nestjs.md](./03-nestjs.md) |
 | Next.js | [04-nextjs.md](./04-nextjs.md) |
 | React SPA | [05-react.md](./05-react.md) |
-| Plain Node / scripts / workers | [03-nestjs.md §3.6](./03-nestjs.md#36-use-case--background-job-bull-cron) (the `captureWithContext` pattern) |
+| Plain Node / scripts / workers | [06-node.md](./06-node.md) |
 
 Minimal wire-up snippets:
 

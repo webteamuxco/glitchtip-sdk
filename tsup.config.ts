@@ -8,6 +8,7 @@ export default defineConfig({
     'next/index': 'src/next/index.ts',
     'next/client': 'src/next/client.ts',
     'next/server': 'src/next/server.ts',
+    'node/index': 'src/node/index.ts',
     'react/index': 'src/react/index.ts',
     'cli/index': 'src/cli/index.ts',
   },
