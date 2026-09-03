@@ -5,10 +5,15 @@ Toutes les évolutions notables de la plateforme UXCO Booking sont documentées 
 Format basé sur [Keep a Changelog](https://keepachangelog.com/) et
 [Conventional Commits](https://www.conventionalcommits.org/).
 
-## [1.1.1] - 2026-09-03
+## [1.1.2] - 2026-09-03
+
+### 🐛 Corrections
+
+- **(react-native)** Ship the subpath bundle, types and keep @sentry/node out of it
 
 ### 📚 Documentation
 
+- **(release)** Update CHANGELOG.md [skip ci]
 - **(release)** Update CHANGELOG.md [skip ci]
 
 ## [1.1.0] - 2026-09-03
