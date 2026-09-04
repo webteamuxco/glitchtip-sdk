@@ -15,8 +15,9 @@ Each page contains snippets you can drop into a project, intentionally-broken ro
 | 4 | [04-nextjs.md](./04-nextjs.md) | Next.js projects (App Router & Pages Router) |
 | 5 | [05-react.md](./05-react.md) | React SPAs (Vite, CRA — anything non-Next) |
 | 6 | [06-core-api.md](./06-core-api.md) | Manual usage (Node scripts, workers, lambdas) |
-| 7 | [07-testing.md](./07-testing.md) | How to trigger errors to verify everything is wired |
-| 8 | [08-troubleshooting.md](./08-troubleshooting.md) | When nothing shows up |
+| 7 | [07-react-native.md](./07-react-native.md) | React Native / Expo apps |
+| 8 | [08-testing.md](./08-testing.md) | How to trigger errors to verify everything is wired |
+| 9 | [09-troubleshooting.md](./09-troubleshooting.md) | When nothing shows up |
 
 ## TL;DR
 
@@ -25,6 +26,7 @@ Each page contains snippets you can drop into a project, intentionally-broken ro
 pnpm add @webteamuxco/glitchtip-sdk @sentry/node          # NestJS / Node
 pnpm add @webteamuxco/glitchtip-sdk @sentry/nextjs        # Next.js
 pnpm add @webteamuxco/glitchtip-sdk @sentry/react         # React SPA
+pnpm add @webteamuxco/glitchtip-sdk @sentry/react-native  # React Native / Expo
 
 # 2. Start GlitchTip locally (writes the DSN into .env)
 pnpm dlx @webteamuxco/glitchtip-sdk dev:up

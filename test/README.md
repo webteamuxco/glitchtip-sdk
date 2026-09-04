@@ -1,6 +1,6 @@
 # Test suite — `@webteamuxco/glitchtip-sdk`
 
-Unit tests for the SDK's business logic. Run with **Vitest** + mocks of the Sentry SDKs (`@sentry/node`, `@sentry/nextjs`, `@sentry/react`).
+Unit tests for the SDK's business logic. Run with **Vitest** + mocks of the Sentry SDKs (`@sentry/node`, `@sentry/nextjs`, `@sentry/react`, `@sentry/react-native`).
 
 ## Commands
 
@@ -19,6 +19,7 @@ The `test/` folder is a **1:1 mirror of `src/`** (the CLI is excluded — it's t
 ```text
 test/
 ├── core/
+│   ├── context.test.ts       # applyContext (CaptureContext → scope mapping shared by all entries)
 │   ├── defaults.test.ts      # resolveDefaults + scrubPII
 │   ├── helpers.test.ts       # setUser, addBreadcrumb, captureWithContext, flush
 │   ├── init.test.ts          # initErrorTracking (DSN, idempotency, enabled)
@@ -31,8 +32,12 @@ test/
 ├── next/
 │   ├── client.test.ts        # DSN precedence on the Next.js client
 │   └── server.test.ts        # DSN precedence on the Next.js server
-└── react/
-    └── init.test.ts          # initClient + browserTracingIntegration
+├── react/
+│   └── init.test.ts          # initClient + browserTracingIntegration
+└── react-native/
+    ├── helpers.test.ts       # captureWithContext, captureMessage, setUser, addBreadcrumb on @sentry/react-native
+    ├── init.test.ts          # initReactNative (DSN, idempotency, mobile defaults)
+    └── log.test.ts           # level forwarding to Sentry.logger
 ```
 
 ## Mocking strategy

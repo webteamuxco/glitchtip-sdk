@@ -32,6 +32,14 @@ pnpm add @webteamuxco/glitchtip-sdk @sentry/node
 
 Then import from `@webteamuxco/glitchtip-sdk/node` — see [06-node.md](./06-node.md).
 
+### React Native / Expo
+
+```bash
+pnpm add @webteamuxco/glitchtip-sdk @sentry/react-native   # or: npx expo install @sentry/react-native
+```
+
+`@sentry/react-native` also needs its native setup (`pod install` / Expo config plugin). Import from `@webteamuxco/glitchtip-sdk/react-native` — see [07-react-native.md](./07-react-native.md).
+
 ## 1.2 Scaffold the integration (optional)
 
 The `init` command detects the framework from `package.json` and writes:

@@ -28,6 +28,9 @@ pnpm add <PKG_NAME> @sentry/nextjs
 
 # React SPA (Vite / CRA)
 pnpm add <PKG_NAME> @sentry/react
+
+# React Native / Expo
+pnpm add <PKG_NAME> @sentry/react-native
 ```
 
 Concrete example for a Next.js project:
@@ -127,6 +130,7 @@ Follow the page matching your stack:
 | Next.js | [04-nextjs.md](./04-nextjs.md) |
 | React SPA | [05-react.md](./05-react.md) |
 | Plain Node / scripts / workers | [06-node.md](./06-node.md) |
+| React Native / Expo | [07-react-native.md](./07-react-native.md) |
 
 Minimal wire-up snippets:
 

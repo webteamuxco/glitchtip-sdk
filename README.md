@@ -21,6 +21,9 @@ pnpm add @webteamuxco/glitchtip-sdk @sentry/node
 
 # Next.js
 pnpm add @webteamuxco/glitchtip-sdk @sentry/nextjs
+
+# React Native / Expo
+pnpm add @webteamuxco/glitchtip-sdk @sentry/react-native
 ```
 
 Or run the installer in any project:
@@ -103,6 +106,22 @@ export const register = async () => initServer();
 import { initClient } from '@webteamuxco/glitchtip-sdk/next/client';
 initClient();
 ```
+
+## React Native / Expo
+
+```tsx
+// App.tsx — before the root component is registered
+import { initReactNative, wrap } from '@webteamuxco/glitchtip-sdk/react-native';
+
+initReactNative({ dsn: process.env.EXPO_PUBLIC_GLITCHTIP_DSN, release: 'app@1.2.3', dist: '42' });
+export default wrap(App);
+```
+
+Same helpers as the server entries (`captureWithContext`, `captureMessage`,
+`setUser`, `addBreadcrumb`, `log`) implemented on top of `@sentry/react-native`,
+plus `ErrorBoundary`, `wrap`, `reactNavigationIntegration`, `flush` and
+`nativeCrash`. `release` and `dist` are not guessed on mobile — pass them.
+See [docs/07-react-native.md](./docs/07-react-native.md).
 
 ## Manual usage
 
@@ -221,6 +240,8 @@ git push --follow-tags
 - [NestJS](./docs/03-nestjs.md)
 - [NextJS](./docs/04-nextjs.md)
 - [React](./docs/05-react.md)
+- [Node](./docs/06-node.md)
+- [React Native](./docs/07-react-native.md)
 
 ## Tests
 
