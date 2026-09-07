@@ -5,6 +5,21 @@ Toutes les évolutions notables de la plateforme UXCO Booking sont documentées 
 Format basé sur [Keep a Changelog](https://keepachangelog.com/) et
 [Conventional Commits](https://www.conventionalcommits.org/).
 
+## [1.1.3] - 2026-09-07
+
+### 📚 Documentation
+
+- **(release)** Update CHANGELOG.md [skip ci]
+- **(react-native)** Documentation for react-native sdk
+
+### 📦 Build & dépendances
+
+- **(core)** Bump to 1.1.3
+
+### 🚀 Nouveautés
+
+- **(react-native)** Complete the mobile entry with uxco helpers, logs and re-exports
+
 ## [1.1.2] - 2026-09-03
 
 ### 🐛 Corrections
