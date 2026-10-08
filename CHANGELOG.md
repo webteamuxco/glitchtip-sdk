@@ -11,19 +11,17 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/) et
 
 - **(release)** Update CHANGELOG.md [skip ci]
 
-### 📦 Build & dépendances
-
-- **(release)** Bump version to 2.0.0
-
 ## [2.0.0] - 2026-10-08
 
 ### 📚 Documentation
 
 - **(release)** Update CHANGELOG.md [skip ci]
+- **(release)** Update CHANGELOG.md [skip ci]
 
 ### 📦 Build & dépendances
 
 - **(deps)** Support sentry v10 and next 16, drop sentry v8
+- **(release)** Bump version to 2.0.0
 
 ## [1.1.4] - 2026-10-07
 
