@@ -77,12 +77,13 @@
   "peerDependencies": {
     "@nestjs/common": "^10.0.0 || ^11.0.0",
     "@nestjs/core": "^10.0.0 || ^11.0.0",
-    "@sentry/core": "^8.0.0 || ^9.0.0 || ^10.0.0",
-    "@sentry/nextjs": "^8.0.0 || ^9.0.0",
-    "@sentry/node": "^8.0.0 || ^9.0.0 || ^10.0.0",
-    "@sentry/react": "^8.0.0 || ^9.0.0 || ^10.0.0",
+    "@sentry/browser": "^9.0.0 || ^10.0.0",
+    "@sentry/core": "^9.0.0 || ^10.0.0",
+    "@sentry/nextjs": "^9.0.0 || ^10.0.0",
+    "@sentry/node": "^9.0.0 || ^10.0.0",
+    "@sentry/react": "^9.0.0 || ^10.0.0",
     "@sentry/react-native": ">=7.0.0 <9",
-    "next": "^14.0.0 || ^15.0.0",
+    "next": "^14.0.0 || ^15.0.0 || ^16.0.0",
     "react": "^18.0.0 || ^19.0.0",
     "rxjs": "^7.0.0"
   },
@@ -91,6 +92,9 @@
       "optional": true
     },
     "@nestjs/core": {
+      "optional": true
+    },
+    "@sentry/browser": {
       "optional": true
     },
     "@sentry/core": {
@@ -119,7 +123,6 @@
     }
   },
   "dependencies": {
-    "@sentry/browser": "9.47.1",
     "kleur": "^4.1.5",
     "prompts": "^2.4.2"
   },
@@ -128,18 +131,19 @@
     "@commitlint/config-conventional": "^21.2.0",
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
-    "@sentry/core": "^9.47.1",
-    "@sentry/nextjs": "^9.0.0",
-    "@sentry/node": "^9.0.0",
-    "@sentry/react-native": "7.11.0",
-    "@sentry/react": "^9.0.0",
+    "@sentry/browser": "^10.76.0",
+    "@sentry/core": "^10.76.0",
+    "@sentry/nextjs": "^10.76.0",
+    "@sentry/node": "^10.76.0",
+    "@sentry/react": "^10.76.0",
+    "@sentry/react-native": "^8.29.0",
     "@types/node": "^22.0.0",
     "@types/prompts": "^2.4.9",
     "@types/react": "^19.0.0",
     "@vitest/coverage-v8": "^4.1.11",
     "git-cliff": "^2.13.1",
     "husky": "^9.1.7",
-    "next": "^15.5.24",
+    "next": "^16.3.8",
     "react": "^19.0.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
@@ -156,6 +160,6 @@
     "url": "git+ssh://git@github.com/webteamuxco/glitchtip-sdk.git"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20.19.0"
   }
 }
